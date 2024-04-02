@@ -1,26 +1,47 @@
-import React from "react";
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import React, { useState } from "react";
 
-export const Form = () => {
+export const Form = ({ addNewTask }) => {
   //local state
-const [form,setForm] = useState({});
+  const [form, setForm] = useState({
+    type: "entry",
+  });
 
-  //function that receives the form data and updates to the local state
-  const handleOnChange = (e) =>{
-    const {name,value} = e.target;
+  // create a function that receives the form data and updates to the local state
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
     setForm({
       ...form,
-      [name] : value
+      [name]: name ==='hr'?+value:value,
     });
-  }
+  };
 
-  const handleOnSubmit = (e)=>{
+  const handleOnSubmit = (e) => {
     e.preventDefault();
-  }
-  
+    const obj = {
+      ...form,
+      id: randomIdGenerator(),
+    };
+
+    addNewTask(obj);
+  };
+
+  const randomIdGenerator = () => {
+    const idLength = 6;
+    const str =
+      "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890";
+
+    let id = "";
+    for (let i = 0; i < idLength; i++) {
+      const randomPosition = Math.floor(Math.random() * str.length);
+      id += str[randomPosition];
+    }
+    return id;
+  };
+
   return (
     <form
-      onSubmit="handleOnSubmit(this)"
+      onSubmit={handleOnSubmit}
       className="mt-5 border p-5 rounded shadow-lg bg-transparent"
     >
       <div className="row g-2">
@@ -32,7 +53,7 @@ const [form,setForm] = useState({});
             aria-label="First name"
             name="task"
             required
-            //call the function on onchange event of the input field
+            // call the fuction on onchange event of the inputfield
             onChange={handleOnChange}
           />
         </div>
@@ -45,7 +66,6 @@ const [form,setForm] = useState({});
             aria-label="Last name"
             name="hr"
             required
-            //call the function on onchange event of the input field
             onChange={handleOnChange}
           />
         </div>
